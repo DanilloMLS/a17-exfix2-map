@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-import entities.Urna;
-
 public class App {
     public static void main(String[] args) throws Exception {
         
@@ -17,19 +15,25 @@ public class App {
 
         try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
             
-            Map<Urna, Integer> votos = new TreeMap<>();
+            Map<String, Integer> votos = new TreeMap<>();
             String linha = br.readLine();
 
             while (linha != null) {
                 
                 String[] dado = linha.split(",");
-                votos.put(new Urna(dado[0], Integer.parseInt(dado[1])), Integer.parseInt(dado[1]));
+                
+                if (votos.containsKey(dado[0])) {
+                    votos.put(dado[0], Integer.parseInt(dado[1]) + votos.get(dado[0]));
+                } else {
+                    votos.put(dado[0], Integer.parseInt(dado[1]));
+                }
+
                 linha = br.readLine();
 
             }
 
-            for (Urna key : votos.keySet()) {
-                System.out.println(key + ": " + votos.get(key));
+            for (String chave : votos.keySet()) {
+                System.out.println(chave + ": " + votos.get(chave));
             }
 
         } catch (Exception e) {
